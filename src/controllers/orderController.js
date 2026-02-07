@@ -69,7 +69,7 @@ exports.createOrder = async (req, res) => {
 
     await connection.commit();
 
-    res.json({
+    res.status(201).json({
       message: "Order created successfully",
       order_id: orderId
     });
