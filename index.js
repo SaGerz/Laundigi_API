@@ -10,6 +10,7 @@ app.use(express.json());
 
 // Endpoint : 
 app.use("/orders", orderRoutes);
+app.use("/laundry", laundryRoutes);
 
 const PORT = process.env.PORT || 3000;
 
