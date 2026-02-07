@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { laundryController } = require("../controllers/laundryController");
+const { createLaundry } = require("../controllers/laundryController");
 
-router.post("/", laundryController);
+router.post("/", createLaundry);
 
 module.exports = router;
