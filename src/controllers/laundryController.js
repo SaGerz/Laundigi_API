@@ -3,12 +3,12 @@ const db = require('../config/db');
 
 exports.createLaundry = async (req, res) => {
     try {
-        const { name, package, active_until } = req.body;
+        const { name, package, active_until, address, phone } = req.body;
 
         const [result] = await db.query(
-            `INSERT INTO laundries (name, package, active_until)
-             VALUES (?, ?, ?)`,
-            [name, package, active_until]
+            `INSERT INTO laundries (name, package, active_until, address, phone)
+             VALUES (?, ?, ?, ?, ?)`,
+            [name, package, active_until, address, phone]
         );
 
         res.status(201).json({
