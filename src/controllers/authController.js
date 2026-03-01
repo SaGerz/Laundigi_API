@@ -61,12 +61,28 @@ exports.register = async (req, res) => {
         [name, email, hashedPassword, role || 'owner', laundryId]
     );
 
+    const userId = userResult.insertId;
+
+    const token = generateToken({
+        id: userId,
+        name,
+        email,
+        role: role || 'owner',
+        laundry_id: laundryId
+    });
+
     await connection.commit();
 
     res.status(201).json({
         message: "Register success",
-        user_id: userResult.insertId,
-        laundry_id: laundryId
+        token,
+        user: {
+            id: userId,
+            name,
+            email,
+            role: role || 'owner',
+            laundry_id: laundryId
+        }
     });
 
     } catch (error) {
