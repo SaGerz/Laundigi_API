@@ -4,7 +4,9 @@ exports.createOrder = async (req, res) => {
   const connection = await pool.getConnection();
 
   try {
-    const { laundry_id, customer, package_type, items } = req.body;
+    const { customer, package_type, items } = req.body;
+    const laundry_id = req.user.laundry_id;
+
 
     await connection.beginTransaction();
 
@@ -82,3 +84,33 @@ exports.createOrder = async (req, res) => {
     connection.release();
   }
 };
+
+exports.getOrder = async (req, res) => {
+  const connection = await pool.getConnection();
+  try {
+    console.log("Masuk Order");
+    const laundry_id = req.user.laundry_id;
+    console.log(laundry_id);
+
+    const[orders] = await connection.query(
+      `SELECT 
+        o.id,
+        c.name,
+        c.phone,
+        o.package_type,
+        o.total_price,
+        o.status,
+        o.received_at
+      FROM orders o
+      JOIN customers c ON o.customer_id = c.id
+      WHERE o.laundry_id = ?
+      ORDER BY o.received_at DESC
+      `, [laundry_id]
+    );
+    
+    res.status(200).json(orders);
+
+  } catch (error) {
+      res.status(500).json({ message: "Failed to fetch orders" });
+  }
+}
