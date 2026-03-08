@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const orderRoutes = require("./src/routes/orderRoutes.js");
 const laundryRoutes = require("./src/routes/laundryRoutes.js");
+const serviceRoutes = require("./src/routes/serviceRoutes.js")
 const authRoutes = require("./src/routes/authRoutes.js");
 const { verifyToken } = require("./src/middleware/authMiddleware.js");
 require("dotenv").config();
@@ -17,6 +18,7 @@ app.use(express.json());
 // Endpoint : 
 app.use("/orders",verifyToken, orderRoutes);
 app.use("/laundries", laundryRoutes);
+app.use("/services", verifyToken, serviceRoutes);
 app.use("/auth", authRoutes);
 
 const PORT = process.env.PORT || 3000;
