@@ -34,9 +34,13 @@ exports.createOrder = async (req, res) => {
     for (const item of items) {
 
       const [serviceRows] = await connection.query(
-        `SELECT price_per_kg FROM services WHERE id = ?`,
-        [item.service_id]
+        `SELECT price_per_kg FROM services WHERE id = ? AND laundry_id = ?`,
+        [item.service_id, laundry_id]
       );
+
+      if (serviceRows.length === 0) {
+        throw new Error("Service not found or invalid");
+      }
 
       const pricePerKg = serviceRows[0].price_per_kg;
       const subtotal = pricePerKg * item.weight;
