@@ -111,8 +111,13 @@ exports.getOrder = async (req, res) => {
       ORDER BY o.received_at DESC
       `, [laundry_id]
     );
+
+    const formatedOrders = orders.map(order => ({
+      ...order,
+      total_price: parseFloat(order.total_price)
+    }))
     
-    res.status(200).json(orders);
+    res.status(200).json(formatedOrders);
 
   } catch (error) {
       res.status(500).json({ message: "Failed to fetch orders" });
