@@ -92,9 +92,7 @@ exports.createOrder = async (req, res) => {
 exports.getOrder = async (req, res) => {
   const connection = await pool.getConnection();
   try {
-    console.log("Masuk Order");
     const laundry_id = req.user.laundry_id;
-    console.log(laundry_id);
 
     const[orders] = await connection.query(
       `SELECT 
