@@ -13,13 +13,13 @@ exports.createService = async (req, res) => {
 
             await db.query(
                 `INSERT INTO services
-                (laundry_id, name, price_per_kg, express_multiplier, created_at)
+                (laundry_id, name, price_per_kg, express_price, created_at)
                 VALUES (?, ?, ?, ?, NOW())`,
                 [
                     laundry_id,
                     service.name,
                     service.price_per_kg,
-                    service.express_multiplier || null
+                    service.express_price || null
                 ]
             );
         }
