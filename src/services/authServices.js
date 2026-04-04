@@ -8,13 +8,13 @@ const registerService = async (body, connection) => {
             password,
             role,
             laundry_name,
-            package,
+            package: pkg,
             address,
             phone
         } = body;
     
     
-        if (!name || !email || !password || !role || !laundry_name || !package || !address || !phone) {
+        if (!name || !email || !password || !role || !laundry_name || !pkg || !address || !phone) {
             throw new Error("Required fields missing");
         }
     
@@ -37,7 +37,7 @@ const registerService = async (body, connection) => {
             `INSERT INTO laundries
             (name, package, active_until, address, phone)
             VALUES (?, ?, ?, ?, ?)`,
-            [laundry_name, package, activeUntil, address, phone]
+            [laundry_name, pkg, activeUntil, address, phone]
         );
     
         const laundryId = laundryResult.insertId;
