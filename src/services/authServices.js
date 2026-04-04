@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const generateToken = require('../utils/generateToken');
 
 const registerService = async (body, connection) => {
      const {
@@ -65,6 +66,51 @@ const registerService = async (body, connection) => {
         };
 }
 
+const loginServices = async (body, db) => {
+    const {
+        email, 
+        password
+    } = body;
+    
+    // cek user
+    const [rows] = await db.query(
+      `SELECT id, name, email, password_hash, role, laundry_id
+       FROM users
+       WHERE email = ?`,
+      [email]
+    );
+
+    if (rows.length === 0) {
+      return res.status(401).json({
+        message: "Email not found"
+      });
+    }
+
+    const user = rows[0];
+
+    // cek password
+    const isMatch = await bcrypt.compare(password, user.password_hash);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        message: "Wrong password"
+      });
+    }
+    
+    // generate token
+    const token = generateToken(user);
+
+     return {
+        message: "Login success",
+        token,
+        id: user.id,
+        name: user.name,
+        role: user.role,
+        laundry_id: user.laundry_id
+    }
+}
+
 module.exports = {
-    registerService
+    registerService,
+    loginServices
 }
