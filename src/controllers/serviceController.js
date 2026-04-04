@@ -39,7 +39,7 @@ exports.getServices = async (req, res) => {
     const laundry_id = req.user.laundry_id;
 
     const [services] = await db.query(
-      `SELECT id, name, price_per_kg 
+      `SELECT id, name, price_per_kg, express_price 
        FROM services 
        WHERE laundry_id = ?`,
       [laundry_id]
