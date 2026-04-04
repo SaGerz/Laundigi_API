@@ -15,9 +15,7 @@ const registerService = async (body, connection) => {
     
     
         if (!name || !email || !password || !role || !laundry_name || !package || !address || !phone) {
-            return res.status(400).json({
-            message: "Required fields missing"
-            });
+            throw new Error("Required fields missing");
         }
     
         // cek email sudah terdaftar
@@ -27,9 +25,7 @@ const registerService = async (body, connection) => {
         );
     
         if (existingUser.length > 0) {
-            return res.status(400).json({
-            message: "Email already registered"
-            });
+            throw new Error("Email already registered");
         }
     
         
@@ -81,9 +77,7 @@ const loginServices = async (body, db) => {
     );
 
     if (rows.length === 0) {
-      return res.status(401).json({
-        message: "Email not found"
-      });
+      throw new Error("Email not found");
     }
 
     const user = rows[0];
@@ -92,9 +86,7 @@ const loginServices = async (body, db) => {
     const isMatch = await bcrypt.compare(password, user.password_hash);
 
     if (!isMatch) {
-      return res.status(401).json({
-        message: "Wrong password"
-      });
+      throw new Error("Wrong password");
     }
     
     // generate token
